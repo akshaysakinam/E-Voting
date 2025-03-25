@@ -17,7 +17,7 @@ app.use(
     origin: [
       "http://localhost:5173", // Vite default port
       "http://localhost:3000", // Alternative local port
-      "https://your-frontend-domain.com", // Add your deployed frontend URL here
+      "https://e-voting-red.vercel.app/", 
     ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
