@@ -11,12 +11,15 @@ const instance = axios.create({
     "Content-Type": "application/json",
     "Accept": "application/json",
   },
+  credentials: 'include', // Include credentials in requests
 });
 
 // Add request interceptor for debugging
 instance.interceptors.request.use(
   (config) => {
     console.log("Making request to:", config.url);
+    // Ensure credentials are included in every request
+    config.withCredentials = true;
     return config;
   },
   (error) => {
@@ -36,8 +39,14 @@ instance.interceptors.response.use(
       console.error("Response Error:", {
         status: error.response.status,
         data: error.response.data,
-        url: error.config.url
+        url: error.config.url,
+        headers: error.response.headers
       });
+      // Handle 401 errors specifically
+      if (error.response.status === 401) {
+        // You might want to redirect to login or refresh token here
+        console.error("Authentication failed. Please log in again.");
+      }
     } else if (error.request) {
       console.error("Request Error:", error.request);
     } else {
