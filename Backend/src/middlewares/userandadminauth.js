@@ -7,18 +7,23 @@ const userandadminauth = (requiredRole = null) => {
       // Read token from cookies
       const { token } = req.cookies;
       if (!token) {
-        return res.status(401).send("Please login to access this resource");
+        return res.status(401).json({ 
+          msg: "Please login to access this resource",
+          error: "No token provided"
+        });
       }
 
       // Validate token
       const decodedObj = await jwt.verify(token, process.env.JWT_SECRET);
-      //console.log(decodedObj)
       const { _id } = decodedObj;
 
       // Find user by ID
       const user = await User.findById(_id);
       if (!user) {
-        throw new Error("User not found");
+        return res.status(401).json({ 
+          msg: "User not found",
+          error: "Invalid token"
+        });
       }
 
       // Attach user details to request
@@ -26,13 +31,31 @@ const userandadminauth = (requiredRole = null) => {
 
       // Role-based access control
       if (requiredRole && user.role !== requiredRole) {
-        return res.status(403).send(`Access Denied to students`);
+        return res.status(403).json({ 
+          msg: `Access Denied. ${requiredRole} role required`,
+          error: "Insufficient permissions"
+        });
       }
 
       next();
     } catch (err) {
-        console.log(err)
-      res.status(400).send("Error: " + err.message);
+      console.error("Auth Error:", err);
+      if (err.name === "JsonWebTokenError") {
+        return res.status(401).json({ 
+          msg: "Invalid token",
+          error: err.message
+        });
+      }
+      if (err.name === "TokenExpiredError") {
+        return res.status(401).json({ 
+          msg: "Token expired",
+          error: "Please login again"
+        });
+      }
+      res.status(500).json({ 
+        msg: "Authentication error",
+        error: err.message
+      });
     }
   };
 };
