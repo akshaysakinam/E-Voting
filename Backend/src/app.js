@@ -15,7 +15,7 @@ const userRouter = require("./routes/user");
 const eligibleStudentsRouter = require("./routes/eligibleStudents");
 
 app.use(cors({
-  origin: "http://localhost:5173", // Frontend URL
+  origin: ["http://localhost:5173", "https://e-voting-red.vercel.app/"], // Frontend URL
   credentials: true
 }));
 
