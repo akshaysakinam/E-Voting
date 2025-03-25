@@ -1,5 +1,5 @@
 const BASE_URL = location.hostname === "localhost" 
-  ? "http://localhost:5000" 
-  : "https://e-voting-deqp.onrender.com";
+  ? "http://localhost:5000/api" 
+  : "https://e-voting-deqp.onrender.com/api";
 
 export { BASE_URL }; 

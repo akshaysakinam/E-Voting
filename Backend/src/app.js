@@ -17,11 +17,11 @@ app.use(
     origin: [
       "http://localhost:5173", // Vite default port
       "http://localhost:3000", // Alternative local port
-      "https://e-voting-red.vercel.app/", 
+      "https://e-voting-red.vercel.app", // Remove trailing slash
     ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
   })
 );
 
@@ -29,11 +29,11 @@ app.use(express.json())
 app.use(cookieParser())
 
 app.use("/api", userRouter);
-app.use('/api',authRouter)
-app.use('/api',adminRouter)
-app.use('/api',studentRouter)
-app.use('/api',voteRouter)
-app.use('/api',eligibleStudentsRouter)
+app.use('/api', authRouter)
+app.use('/api', adminRouter)
+app.use('/api', studentRouter)
+app.use('/api', voteRouter)
+app.use('/api', eligibleStudentsRouter)
 
 connectDB()
   .then(() => {
