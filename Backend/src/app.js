@@ -8,16 +8,25 @@ const studentRouter = require("./routes/student");
 const voteRouter = require("./routes/vote");
 const app = express();
 const PORT = process.env.PORT;
-app.use(cookieParser())
-app.use(express.json())
 const cors = require("cors");
 const userRouter = require("./routes/user");
 const eligibleStudentsRouter = require("./routes/eligibleStudents");
 
-app.use(cors({
-  origin: ["http://localhost:5173", "https://e-voting-red.vercel.app/"], // Frontend URL
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173", // Vite default port
+      "http://localhost:3000", // Alternative local port
+      "https://your-frontend-domain.com", // Add your deployed frontend URL here
+    ],
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+
+app.use(express.json())
+app.use(cookieParser())
 
 app.use("/api", userRouter);
 app.use('/api',authRouter)
